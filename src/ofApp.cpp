@@ -27,7 +27,7 @@ void ofApp::setup(){
     panel.setup(params);
     
     
-    //viewerOffsetFiltered.setQ()
+    viewerOffsetFiltered.setFc(0.065);
     
     kinect.init();
     
