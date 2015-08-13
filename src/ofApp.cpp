@@ -13,7 +13,7 @@ void ofApp::setup(){
     
     params.setName("ss");
     
-    params.add(viewerPos.set("pos", ofVec3f(0,0,0), ofVec3f(-2000,-2000,-2000), ofVec3f(2000,2000,2000)));
+    params.add(viewerPosRef.set("pos", ofVec3f(0,0,0), ofVec3f(-2000,-2000,-2000), ofVec3f(2000,2000,2000)));
     
  params.add(nearThreshold.set("nearThreshold", 0, 0, 255));
  params.add(farThreshold.set("farThreshold", 0, 0, 255));
@@ -25,6 +25,9 @@ void ofApp::setup(){
     
     
     panel.setup(params);
+    
+    
+    //viewerOffsetFiltered.setQ()
     
     kinect.init();
     
@@ -42,11 +45,9 @@ void ofApp::setup(){
     cam.setPosition(0,0,-2000);
     cam.setupPerspective();
     
-    viewerPos.set(cam.getPosition());
+    viewerPosRef.set(cam.getPosition());
     
     cam.lookAt(ofVec3f(0,0,0));
-    
-    
     
     panel.loadFromFile("settings.xml");
 
@@ -89,7 +90,9 @@ void ofApp::update(){
         }
     }
     
-    cam.setPosition(viewerPos.get() - viewerOffset.get());
+    viewerOffsetFiltered.update(viewerOffset.get());
+    
+    cam.setPosition(viewerPosRef.get() - viewerOffsetFiltered.value());
     
     //
     cam.setupOffAxisViewPortal(ofVec3f(-1*w,-1*h,0), ofVec3f(-1*w,1*h,0), ofVec3f(1*w,1*h,0));

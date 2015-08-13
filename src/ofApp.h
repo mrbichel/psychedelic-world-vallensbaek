@@ -4,6 +4,7 @@
 #include "ofxGui.h"
 #include "ofxKinect.h"
 #include "ofxOpenCv.h"
+#include "ofxBiquadFilter.h"
 
 class ofApp : public ofBaseApp{
 
@@ -24,7 +25,7 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
     void drawFrame();
     
-    ofParameter<ofVec3f>  viewerPos;
+    
     
     ofCamera cam;
     ofPlanePrimitive landscape;
@@ -66,10 +67,10 @@ class ofApp : public ofBaseApp{
     
     // colors ?
     
-    
     // has blob
+    ofParameter<ofVec3f> viewerPosRef;
     
-    
+    ofxBiquadFilter3f viewerOffsetFiltered;
     
     
     

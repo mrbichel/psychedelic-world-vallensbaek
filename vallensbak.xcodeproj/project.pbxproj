@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0413D99F1B7C97B400714056 /* ofxBiquadFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0413D99B1B7C97B400714056 /* ofxBiquadFilter.cpp */; };
+		0413D9A01B7C97B400714056 /* ofxBiquadFilterInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0413D99D1B7C97B400714056 /* ofxBiquadFilterInstance.cpp */; };
 		04460A841B6FCBD6002A5FA4 /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04460A731B6FCBD6002A5FA4 /* ofxBaseGui.cpp */; };
 		04460A851B6FCBD6002A5FA4 /* ofxButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04460A751B6FCBD6002A5FA4 /* ofxButton.cpp */; };
 		04460A861B6FCBD6002A5FA4 /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04460A781B6FCBD6002A5FA4 /* ofxGuiGroup.cpp */; };
@@ -88,6 +90,10 @@
 /* Begin PBXFileReference section */
 		01438542609FC64F1EC60EEB /* ofxKinectExtras.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxKinectExtras.cpp; path = ../../../addons/ofxKinect/src/extra/ofxKinectExtras.cpp; sourceTree = SOURCE_ROOT; };
 		03A9E977F3814A55A4FA3B4E /* ofxKinectExtras.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxKinectExtras.h; path = ../../../addons/ofxKinect/src/extra/ofxKinectExtras.h; sourceTree = SOURCE_ROOT; };
+		0413D99B1B7C97B400714056 /* ofxBiquadFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxBiquadFilter.cpp; sourceTree = "<group>"; };
+		0413D99C1B7C97B400714056 /* ofxBiquadFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxBiquadFilter.h; sourceTree = "<group>"; };
+		0413D99D1B7C97B400714056 /* ofxBiquadFilterInstance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxBiquadFilterInstance.cpp; sourceTree = "<group>"; };
+		0413D99E1B7C97B400714056 /* ofxBiquadFilterInstance.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxBiquadFilterInstance.h; sourceTree = "<group>"; };
 		04460A731B6FCBD6002A5FA4 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxBaseGui.cpp; sourceTree = "<group>"; };
 		04460A741B6FCBD6002A5FA4 /* ofxBaseGui.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxBaseGui.h; sourceTree = "<group>"; };
 		04460A751B6FCBD6002A5FA4 /* ofxButton.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxButton.cpp; sourceTree = "<group>"; };
@@ -281,6 +287,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0413D9991B7C97B400714056 /* ofxBiquadFilter */ = {
+			isa = PBXGroup;
+			children = (
+				0413D99A1B7C97B400714056 /* src */,
+			);
+			name = ofxBiquadFilter;
+			sourceTree = "<group>";
+		};
+		0413D99A1B7C97B400714056 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				0413D99B1B7C97B400714056 /* ofxBiquadFilter.cpp */,
+				0413D99C1B7C97B400714056 /* ofxBiquadFilter.h */,
+				0413D99D1B7C97B400714056 /* ofxBiquadFilterInstance.cpp */,
+				0413D99E1B7C97B400714056 /* ofxBiquadFilterInstance.h */,
+			);
+			name = src;
+			path = ../../../addons/ofxBiquadFilter/src;
+			sourceTree = "<group>";
+		};
 		04460A711B6FCBD6002A5FA4 /* ofxGui */ = {
 			isa = PBXGroup;
 			children = (
@@ -658,6 +684,7 @@
 				9683228C705CA3FF4F2EA945 /* ofxKinect */,
 				04460A711B6FCBD6002A5FA4 /* ofxGui */,
 				04D5896E1B7217B200B54283 /* ofxOpenCv */,
+				0413D9991B7C97B400714056 /* ofxBiquadFilter */,
 			);
 			name = addons;
 			sourceTree = "<group>";
@@ -881,6 +908,7 @@
 				ACE7DC9A3223ED5EE1B80074 /* cameras.c in Sources */,
 				04460A8B1B6FCBD6002A5FA4 /* ofxToggle.cpp in Sources */,
 				F4135EEFC911E9ED211FB6F9 /* core.c in Sources */,
+				0413D99F1B7C97B400714056 /* ofxBiquadFilter.cpp in Sources */,
 				04460A881B6FCBD6002A5FA4 /* ofxPanel.cpp in Sources */,
 				E55DEEF784A10419E444669E /* flags.c in Sources */,
 				21A059755481CC0BF969FD2D /* keep_alive.c in Sources */,
@@ -891,6 +919,7 @@
 				04D589E91B7217B200B54283 /* ofxCvContourFinder.cpp in Sources */,
 				04D589E81B7217B200B54283 /* ofxCvColorImage.cpp in Sources */,
 				04D589ED1B7217B200B54283 /* ofxCvImage.cpp in Sources */,
+				0413D9A01B7C97B400714056 /* ofxBiquadFilterInstance.cpp in Sources */,
 				04460A871B6FCBD6002A5FA4 /* ofxLabel.cpp in Sources */,
 				04460A841B6FCBD6002A5FA4 /* ofxBaseGui.cpp in Sources */,
 				255A7B680DC81E543C875794 /* usb_libusb10.c in Sources */,
