@@ -1,1 +1,4 @@
+ofxGui
 ofxKinect
+ofxXmlSettings
+ofxSyphon

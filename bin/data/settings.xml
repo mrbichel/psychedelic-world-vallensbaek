@@ -1,0 +1,11 @@
+<ss>
+	<light_pos>408.163, -265.306, 489.796</light_pos>
+	<cam_ref_pos>0, 0, -665.107</cam_ref_pos>
+	<nearThreshold>212</nearThreshold>
+	<farThreshold>200</farThreshold>
+	<focal_range>57</focal_range>
+	<focal_dist>43</focal_dist>
+	<focal_blur>24</focal_blur>
+	<destroy>0.877097</destroy>
+<ss/>
+</ss>
