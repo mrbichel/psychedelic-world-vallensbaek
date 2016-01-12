@@ -3,13 +3,29 @@
 #include "ofMain.h"
 #include "ofxGui.h"
 #include "ofxKinect.h"
-#include "ofxOpenCv.h"
 #include "ofxBiquadFilter.h"
 #include "ofxAssimpModelLoader.h"
-#include "ofxVoro.h"
 #include "ofxSyphon.h"
-#include "ofxDOF.h"
+#include "ofxCv.h"
 
+#define STRINGIFY(A) #A
+/*
+ 
+ todo
+ 
+ better dof
+ - animate Y based on dist to kinect
+ - calibrate filter
+ - dof pulses
+ - continues movement 
+ - reaction to multiple persons 
+ - color fade 
+ - noise flitchy destruction pules 
+ - mix with random fbo content maybe 
+ - pulses comes from sudden movement on
+ - return to center before closing
+ 
+ */
 
 /*
 enum State
@@ -52,6 +68,7 @@ public:
     void drawFrame();
     
     ofCamera cam;
+    ofCamera testModelCam;
     ofPlanePrimitive landscape;
     ofCylinderPrimitive cyl;
     
@@ -60,8 +77,11 @@ public:
     
     ofxSyphonServer syphonOut;
     ofFbo outFbo;
+    ofFbo dofFbo;
     
     ofLight light;
+    
+    ofShader DOFShader;
     
     ofLight spotLight;
     ofLight directionalLight;
@@ -73,27 +93,26 @@ public:
     
     ofxKinect kinect;
     
-    ofxCvColorImage colorImg;
+    ofImage depthImage; // grayscale depth image
+    ofImage grayThreshNear; // the near thresholded image
+    ofImage grayThreshFar; // the far thresholded image
+    ofImage diff;
+    ofImage bgImg;
     
-    ofxCvGrayscaleImage grayImage; // grayscale depth image
-    ofxCvGrayscaleImage grayThreshNear; // the near thresholded image
-    ofxCvGrayscaleImage grayThreshFar; // the far thresholded image
+    ofxCv::ContourFinder contourFinder;
     
-    ofxCvContourFinder contourFinder;
+    ofParameter<float> blur;
+    ofParameter<bool> setBg;
+    ofParameter<float> minAreaRadius;
+    ofParameter<float> contourThreshold;
     
-    bool bThreshWithOpenCV;
-    bool bDrawPointCloud;
+    ofParameter<float> minBlobSize;
     
-    ofParameter<int> nearThreshold;
-    ofParameter<int> farThreshold;
+    ofParameter<float> maxBlobSize;
     
-    ofParameter<int> minBlobSize;
-    
-    ofParameter<int> maxBlobSize;
-    
-    ofParameter<float> focalRange;
-    ofParameter<float> focalDistance;
-    ofParameter<float> focalBlur;
+    ofParameter<float> aperture;
+    ofParameter<float> focus;
+    ofParameter<float> maxBlur;
     
     ofVec3f viewerOffset; // kinect pos - needs to be rotated into projection matrix
     
@@ -108,6 +127,7 @@ public:
     // has blob
     ofParameter<ofVec3f> camRefPos;
     ofParameter<float> destroy;
+    ofxBiquadFilter1f destroyFiltered;
     ofxBiquadFilter3f viewerOffsetFiltered;
     
     ofParameter<ofVec3f> lightPos;
@@ -115,23 +135,17 @@ public:
     
     ofxAssimpModelLoader modelLoader;
     
-    vector<ofPoint> cellCentroids;
-    vector<float>   cellRadius;
-    vector<ofVboMesh>  cellMeshes;
-    vector<ofVboMesh>  cellMeshWireframes;
     ofMesh m;
     
-    
     vector<ofVboMesh>  triangles;
-    
-    ofxDOF dof;
-    
+        
     // state
     
     bool hasBlob = false;
     unsigned int long lastBlobArrivedTime;
     
     
+    void texturedQuad(float x, float y, float width, float height, float s = 1.0, float t = 1.0);
     
     
 };

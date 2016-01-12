@@ -1,11 +1,18 @@
 <ss>
-	<light_pos>408.163, -265.306, 489.796</light_pos>
-	<cam_ref_pos>0, 0, -665.107</cam_ref_pos>
-	<nearThreshold>212</nearThreshold>
-	<farThreshold>200</farThreshold>
-	<focal_range>57</focal_range>
-	<focal_dist>43</focal_dist>
-	<focal_blur>24</focal_blur>
-	<destroy>0.877097</destroy>
+	<light_pos>183.673, -244.898, 1653.06</light_pos>
+	<cam_ref_pos>-979.592, -1040.82, -1469.39</cam_ref_pos>
+	<nearThreshold>165.75</nearThreshold>
+	<farThreshold>110.925</farThreshold>
+	<focal_range>0.955</focal_range>
+	<focal_dist>1</focal_dist>
+	<focal_blur>0.295</focal_blur>
+	<destroy>0.06</destroy>
 <ss/>
+<aperture>0.48</aperture>
+	<focus>0.974806</focus>
+	<max_blur>0.325</max_blur>
+<threshold_contour>20.4</threshold_contour>
+	<blur>0</blur>
+	<setBg>0</setBg>
+<minAreaRadius>12.8</minAreaRadius>
 </ss>
