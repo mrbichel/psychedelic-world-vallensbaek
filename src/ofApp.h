@@ -144,8 +144,11 @@ public:
     bool hasBlob = false;
     unsigned int long lastBlobArrivedTime;
     
+    unsigned int trackLabel;
     
     void texturedQuad(float x, float y, float width, float height, float s = 1.0, float t = 1.0);
+    
+    
     
     
 };

@@ -1,5 +1,7 @@
 #include "ofApp.h"
 
+using namespace ofxCv;
+
 //--------------------------------------------------------------
 void ofApp::setup(){
     
@@ -194,7 +196,7 @@ void ofApp::setup(){
     // the light highlight of the material //
     //mat.setSpecularColor(ofColor(255, 255, 255, 255));
     //mat.setAmbientColor( ofColor(255, 255, 255, 255));
-    mat.setEmissiveColor(ofColor(255, 255, 255, 255));
+    //mat.setEmissiveColor(ofColor(255, 255, 255, 255));
     
     panel.setup(params);
     viewerOffsetFiltered.setFc(0.005);
@@ -280,7 +282,7 @@ void ofApp::setup(){
         vboF.addVertex(f.getVertex(1));
         vboF.addVertex(f.getVertex(2));
         
-        vboF.addColor(ofFloatColor(i*1.0/m.getUniqueFaces().size()*1.0));
+        //vboF.addColor(ofFloatColor(i*1.0/m.getUniqueFaces().size()*1.0));
         
         triangles.push_back(vboF);
     }
@@ -314,18 +316,55 @@ void ofApp::update(){
         contourFinder.setMinAreaRadius(minAreaRadius.get());
         
         contourFinder.setThreshold(contourThreshold.get());
+        
+        contourFinder.getTracker().setPersistence(15);
+        // an object can move up to 32 pixels per frame
+        contourFinder.getTracker().setMaximumDistance(32);
+        
         contourFinder.findContours(diff);
         
-        if(contourFinder.size() > 0) {
-            if(!hasBlob) {
-                lastBlobArrivedTime = ofGetElapsedTimeMillis();
-                hasBlob = true;
+        RectTracker& tracker = contourFinder.getTracker();
+        
+        const vector<unsigned int>& currentLabels = tracker.getCurrentLabels();
+        
+        if(!tracker.existsCurrent(trackLabel)) {
+            
+            hasBlob = false;
+            if(currentLabels.size() > 0) {
+                int j = currentLabels[0];
+                trackLabel = j;
+                
+                if(!hasBlob) {
+                    lastBlobArrivedTime = ofGetElapsedTimeMillis();
+                    hasBlob = true;
+                }
             }
-        } else {
-            if(hasBlob) {
-                hasBlob = false;
-            }
+            
         }
+        
+        if(tracker.existsCurrent(trackLabel)) {
+            // we got the same blob update teh position
+            
+            if(destroyFiltered.value() > 0.5) {
+                
+                const cv::Rect& current = tracker.getCurrent(trackLabel);
+                ofVec2f currentPosition(current.x + current.width / 2, current.y + current.height / 2);
+                
+                
+                viewerOffset.x = ofMap(currentPosition.x, 0, kinect.width, -w/2, w/2);
+                viewerOffset.z = ofMap(currentPosition.y, 0, kinect.height, 0, 8<00);
+                
+                viewerOffset.y = ofMap(kinect.getDistanceAt(currentPosition),
+                                       4000, 6000, h/5, 0, true);
+                
+                //cout<<kinect.getDistanceAt(ofxCv::toOf(contourFinder.getCentroid(i)))<<endl;
+                // some get distance at
+            }
+
+            
+            
+        }
+
         
         if(hasBlob && ofGetElapsedTimeMillis() - lastBlobArrivedTime > 2000) {
             if(destroy < 1)
@@ -337,22 +376,6 @@ void ofApp::update(){
         
         destroy = ofClamp(destroy, 0, 1);
         
-        // choose largest blob - stick to it
-        for(int i=0; i<contourFinder.size(); i++) {
-            if(i == 0) {
-                if(destroyFiltered.value() > 0.5) {
-                    
-                    viewerOffset.x = ofMap(contourFinder.getCentroid(i).x, 0, kinect.width, -w/2, w/2);
-                    viewerOffset.z = ofMap(contourFinder.getCentroid(i).y, 0, kinect.height, 0, 8<00);
-                    
-                    viewerOffset.y = ofMap(kinect.getDistanceAt(ofxCv::toOf(contourFinder.getCentroid(i))),
-                                           4000, 6000, h/5, 0, true);
-                    
-                    //cout<<kinect.getDistanceAt(ofxCv::toOf(contourFinder.getCentroid(i)))<<endl;
-                    // some get distance at
-                }
-            }
-        }
     }
     
     viewerOffsetFiltered.update(viewerOffset);
@@ -445,8 +468,8 @@ void ofApp::draw(){
         
             ofPushMatrix();{
             
-                ofRotateZ((i%18)*10);
-                ofTranslate(-1*w,-1*h,100 + (i*40));
+                ofRotateZ(((i%18)*10));
+                ofTranslate(-1*w,-1*h,200 + (i*40 * destroyFiltered.value()) );
             
                 ofFill();
                 ofSetColor(255, 255, 255);
@@ -454,10 +477,11 @@ void ofApp::draw(){
                 ofBeginShape(); {
                 
                     for(int x=1; x<=xsteps; x++) {
+                        float ww = 200 * (1.0-destroyFiltered.value());
                         ofVertex(x * (w*2/ysteps), 0, x*2);
                         ofVertex(0, y * ((h*2)/xsteps), x*2);
-                        ofVertex(0+10,  y * ((h*2)/xsteps)+10, x*2);
-                        ofVertex(x * (w*2/ysteps)+10, 10, x*2);
+                        ofVertex(ww+10,  y * ((h*2)/xsteps)+10+ww, x*2);
+                        ofVertex(x * (w*2/ysteps)+10+ww, 10+ww, x*2);
                         y--;
                     }
                 
@@ -468,8 +492,8 @@ void ofApp::draw(){
         
             ofPushMatrix(); {
             
-                ofRotateZ((i%36)*10 + 180);
-                ofTranslate(-1*w,-1*h,100 + (i*40));
+                ofRotateZ(((i%36)*10 + 180) * destroyFiltered.value());
+                ofTranslate(-1*w,-1*h,200 + (i*40 * destroyFiltered.value()));
             
                 ysteps = 4;
                 xsteps = 4;
@@ -479,13 +503,11 @@ void ofApp::draw(){
                 
                     y=ysteps;
                     for(int x=1; x<=xsteps; x++) {
-                    
+                        float ww = 200 * (1.0-destroyFiltered.value());
                         ofVertex(x * (w*2/ysteps), 0, x*2);
                         ofVertex(0, y * ((h*2)/xsteps), x*2);
-                    
-                        ofVertex(0+10,  y * ((h*2)/xsteps)+10, x*2);
-                        ofVertex(x * (w*2/ysteps)+10, 10, x*2);
-                    
+                        ofVertex(ww+10,  y * ((h*2)/xsteps)+10+ww, x*2);
+                        ofVertex(x * (w*2/ysteps)+10+ww, 10+ww, x*2);
                         y--;
                     }
                 
@@ -497,21 +519,28 @@ void ofApp::draw(){
         
         ofPushMatrix(); {
         //ofPushStyle(); {
-            ofTranslate(0,-1*h, 0);
+            ofTranslate(0,-1*h, 150);
             ofScale(16, 16);
             
             for (int i = 0; i < triangles.size(); i++){
                 ofPushMatrix();
         
-                ofTranslate(0,400.0*powf(destroyFiltered.value(),2), ofNoise(i*10.0)*i*destroyFiltered.value()*400.0*destroy.get());
-        
+                //ofTranslate(0,400.0*powf(destroyFiltered.value(),2), ofNoise(i*10.0)*i*destroyFiltered.value()*400.0*destroy.get());
+                
+                float s = powf(1.0-destroyFiltered.value(),2);
+                
+                
                 ofTranslate(triangles[i].getCentroid());
-                ofRotateX(ofNoise(i*10.0)*i*destroy.get()*100.0*destroy.get());
+                
+                ofScale(1.0-destroyFiltered.value(),1.0-destroyFiltered.value());
+                //ofRotateX(ofNoise(i*2.0)*i*destroy.get()*10.0*destroy.get());
                 ofTranslate(-triangles[i].getCentroid());
         
                 //
                 mat.begin();
                 triangles[i].draw();
+                //triangles[i].drawWireframe();
+
                 mat.end();
                 
                 ofPopMatrix();
